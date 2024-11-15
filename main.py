@@ -51,8 +51,28 @@ def page_rank(graph: dict) -> dict[str, list[int]]:
             page_ranks[key] += [sum_]
     return page_ranks
 
+def sort_by_rank(bench: dict) -> dict[str, int]:
+    '''
+    Sorts a dictionary with benchmarks (return of page_rank function).
+    Returns a dictionary with each team as a key and each value is a page rank
+    in comparison to every other team. The higher the rank, the more 'important'
+    each team is.
+    :param bench: dict, the dictionary with data from all iterations.
+    :return: dict[str, int]
+    >>> d = {
+    ...     'A': ({'B', 'C'}, {'C'}),
+    ...     'B': ({'D'}, {'A', 'C'}),
+    ...     'D': ({'C'}, {'B', 'C'}),
+    ...     'C': ({'A', 'B', 'D'}, {'A', 'D'})
+    ... }
+    >>> ranks = page_rank(d)
+    >>> sort_by_rank(ranks)
+    {'A': 1, 'B': 2, 'D': 3, 'C': 4}
+    '''
+    items = sorted(bench.items(), key=lambda x: x[-1][-1])
+    dt = {item[0]: i for i, item in enumerate(items, 1)}
+    return dt
 
 if __name__ == '__main__':
     import doctest
     print(doctest.testmod())
-
