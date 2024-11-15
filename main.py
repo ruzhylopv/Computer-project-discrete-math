@@ -28,8 +28,12 @@ d = {
 len(d['A'])
 def page_rank(graph: dict) -> dict[str, int]:
 
-    page_ranks = {key: 1/len(graph) for key in graph}
+    # page_ranks = {key: 1/len(graph) for key in graph}
+    page_ranks = {list(graph.keys())[i]: [] for i in range(len(graph))}
+    for key in page_ranks:
+        page_ranks[key] += [1/len(graph)]
     
+    return page_ranks
     for key in graph:
         for vertex in graph[key][1]:
             page_ranks[key] = page_ranks[vertex]
