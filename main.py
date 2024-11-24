@@ -35,7 +35,9 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
         games_results = [0] * players_count
         for i, val in enumerate(players_stats):
             players_stats[i] = val.split()[:points_pos]
-            players[i] = (players_stats[i][-players_count - 4][:-1] + ' ' + players_stats[i][-players_count - 3], players_stats[i][-players_count - 1])
+            players[i] = (players_stats[i][-players_count - 4][:-1] + \
+                          ' ' + players_stats[i][-players_count - 3], \
+                            players_stats[i][-players_count - 1])
             games_results[i] = players_stats[i][-players_count:]
         games = []
         for i, player_games_results in enumerate(games_results):
@@ -46,10 +48,6 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
                     case '½':
                         games.append((players[i][0], players[j][0]))
         return (tournament_name, players, games)
-
-
-for i in read_file('tournament_2.txt'):
-    print(i)
 
 
 def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]]:
@@ -147,6 +145,32 @@ def sort_by_rank(bench: dict) -> dict[str, int]:
     items = sorted(bench.items(), key=lambda x: x[-1][-1])
     dt = {item[0]: i for i, item in enumerate(items, 1)}
     return dt
+
+
+def main():
+    '''
+    Main function
+    '''
+    mas = ['tournament_2.txt']
+    d = get_tournaments_dict(mas)
+    print(d)
+    for key_, value_ in d.items():
+        print()
+        tournament_name, players, games = read_file(value_)
+        print(tournament_name)
+        for player in players:
+            print(player)
+        games = to_dict(games)
+        players_page_rank = page_rank(games)
+        for i in players_page_rank.items():
+            print(i)
+        players_page_rank = sort_by_rank(players_page_rank)
+        for i in players_page_rank.items():
+            print(i)
+
+
+main()
+
 
 if __name__ == '__main__':
     import doctest
