@@ -52,17 +52,36 @@ for i in read_file('tournament_2.txt'):
     print(i)
 
 
-def to_dict():
+def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]]:
+    '''
+    Translate a list of games into a dictonary consisting of
+    player names and two sets: to who did they lose and who
+    did they overcome.
+
+    :param games: list[tuple[str, str]], the list of tuples
+    containing a winner and a loser of a game.
+    :return: dict[str, tuple[set[str], set[str]]], the
+    dictonary with wins and loses of every player.
+    '''
+    d = {}
+    for v, u in games:
+        if v not in d:
+            d[v] = (set(), set())
+        if u not in d:
+            d[u] = (set(), set())
+        d[v][1].add(u)
+        d[u][0].add(v)
+    return d
 
 
-d = {
-    'A': ({'B', 'C'}, {'C'}),
-    'B': ({'D'}, {'A', 'C'}),
-    'D': ({'C'}, {'B', 'C'}),
-    'C': ({'A', 'B', 'D'}, {'A', 'D'})
-}
+# d = {
+#     'A': ({'B', 'C'}, {'C'}),
+#     'B': ({'D'}, {'A', 'C'}),
+#     'D': ({'C'}, {'B', 'C'}),
+#     'C': ({'A', 'B', 'D'}, {'A', 'D'})
+# }
 
-len(d['A'])
+# len(d['A'])
 def page_rank(graph: dict) -> dict[str, list[int]]:
     '''
     Finds a page rank of 2 iterations of teams given as a dictionary
