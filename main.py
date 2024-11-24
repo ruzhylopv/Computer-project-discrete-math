@@ -74,6 +74,25 @@ def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]
     return d
 
 
+def get_tournaments_dict(tournament_file_paths_list: list[str]) -> dict[str, str]:
+    '''
+    Get the dictonary, where the key is a tournament name
+    and country, and the value is a tournament file path.
+
+    :param tournament_file_paths_list: list[str], the list of
+    all the file paths containing tournamnt information
+    :return: dict[str, str], a dictonary,
+    where the key is a tournament name, and
+    the value is a tournament file path
+    '''
+    d = {}
+    for file_path in tournament_file_paths_list:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            tournament_name = file.readline().strip()
+            d[tournament_name] = file_path
+    return d
+
+
 # d = {
 #     'A': ({'B', 'C'}, {'C'}),
 #     'B': ({'D'}, {'A', 'C'}),
