@@ -1,0 +1,14 @@
+FIDE Women's Grand Prix 2024/25 - First Leg, Tbilisi
+
+Final Ranking crosstable after 9 Rounds
+Rk.	 		Name	Rtg	FED	1	2	3	4	5	6	7	8	9	10	Pts.	 TB1 	 TB2 	 TB3 	 TB4 	 TB5 
+1		IM	Kashlinskaya, Alina	2474	POL	*	½	½	½	½	1	1	½	1	½	6	4	25,50	3	0	0
+2		IM	Assaubayeva, Bibisara	2470	KAZ	½	*	½	½	½	½	½	1	½	1	5,5	4	23,00	2	0	0
+3		IM	Tsolakidou, Stavroula	2429	GRE	½	½	*	½	½	½	1	½	½	½	5	4	22,00	1	0	0
+4		GM	Dzagnidze, Nana	2506	GEO	½	½	½	*	½	½	0	1	½	1	5	4	21,25	2	0	0
+5		GM	Muzychuk, Anna	2525	UKR	½	½	½	½	*	½	½	½	½	1	5	4	21,25	1	0	0
+6		GM	Muzychuk, Mariya	2508	UKR	0	½	½	½	½	*	1	½	½	½	4,5	5	19,25	1	0	0
+7		GM	Vaishali, Rameshbabu	2506	IND	0	½	0	1	½	0	*	½	½	1	4	5	16,50	2	0	0
+8		GM	Kosteniuk, Alexandra	2488	SUI	½	0	½	0	½	½	½	*	½	1	4	5	16,50	1	0	0
+9		IM	Javakhishvili, Lela	2451	GEO	0	½	½	½	½	½	½	½	*	0	3,5	5	16,50	0	0	0
+10		IM	Khademalsharieh, Sarasadat	2489	ESP	½	0	½	0	0	½	0	0	1	*	2,5	5	11,25	1	0	0

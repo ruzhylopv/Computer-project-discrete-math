@@ -10,12 +10,49 @@
 # print(black)
 
 
-def read_file():
-    # (['s', 'ds', 'dh ff', 'kjscha'], [('a', 'b'), ('c', 'd')]
-    pass
+def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[str, str]]]:
+    '''
+    Read file with a tournament data and return a tuple with a tournament
+    name, players information and games results.
+
+    :param file_path: str, a path to the file, where tournament data is
+    stored.
+    :return: tuple[str, list[tuple[str, str]], list[tuple[str, str]]],
+    a tuple with a tournament name the players info and the games results,
+    in the format of tuples, where the first element is a winner, and the
+    second, a loser.
+    '''
+    # (['s', 'ds', 'dh ff', 'kjscha'], [('a', 'b'), ('c', 'd')])
+    with open(file_path, 'r', encoding='utf-8') as file:
+        tournament_name = file.readline().strip()
+        file.readline()
+        file.readline()
+        tournament_table_head = file.readline().strip().split()
+        points_pos = tournament_table_head.index('Pts.') - len(tournament_table_head)
+        players_stats = file.read().strip().split('\n')
+        players_count = len(players_stats)
+        players = [0] * players_count
+        games_results = [0] * players_count
+        for i, val in enumerate(players_stats):
+            players_stats[i] = val.split()[:points_pos]
+            players[i] = (players_stats[i][-players_count - 4][:-1] + ' ' + players_stats[i][-players_count - 3], players_stats[i][-players_count - 1])
+            games_results[i] = players_stats[i][-players_count:]
+        games = []
+        for i, player_games_results in enumerate(games_results):
+            for j, game_result in enumerate(player_games_results):
+                match game_result:
+                    case '1':
+                        games.append((players[i][0], players[j][0]))
+                    case '½':
+                        games.append((players[i][0], players[j][0]))
+        return (tournament_name, players, games)
+
+
+for i in read_file('tournament_2.txt'):
+    print(i)
+
 
 def to_dict():
-    pass
 
 
 d = {
