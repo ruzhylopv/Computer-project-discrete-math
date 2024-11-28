@@ -50,7 +50,7 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
                         games.append((players[i][0], players[j][0]))
                     case '½':
                         games.append((players[i][0], players[j][0]))
-        return (tournament_name, players, games)
+        return (tournament_name, dict(players), games)
 
 
 def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]]:
@@ -73,6 +73,7 @@ def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]
         d[v][1].add(u)
         d[u][0].add(v)
     return d
+
 
 
 def get_tournaments_dict(tournament_file_paths_list: list[str]) -> dict[str, str]:
@@ -99,9 +100,6 @@ def get_tournaments_dict(tournament_file_paths_list: list[str]) -> dict[str, str
 #     'B': ({'D'}, {'A', 'C'}),
 #     'D': ({'C'}, {'B', 'C'}),
 #     'C': ({'A', 'B', 'D'}, {'A', 'D'})
-# }
-
-# len(d['A'])
 def page_rank(graph: dict) -> dict[str, list[int]]:
     '''
     Finds a page rank of 2 iterations of teams given as a dictionary
@@ -143,68 +141,11 @@ def sort_by_rank(bench: dict) -> dict[str, int]:
     ... }
     >>> ranks = page_rank(d)
     >>> sort_by_rank(ranks)
-    {'A': 1, 'B': 2, 'D': 3, 'C': 4}
+    {'C': 4, 'D': 3, 'B': 2, 'A': 1}
     '''
-    items = sorted(bench.items(), key=lambda x: x[-1][-1])
-    dt = {item[0]: i for i, item in enumerate(items, 1)}
+    items = sorted(bench.items(), key=lambda x: -x[-1][-1])
+    dt = {item[0]: len(items) - i + 1 for i, item in enumerate(items, 1)}
     return dt
-
-
-
-
-customtkinter.set_appearance_mode("system")
-customtkinter.set_default_color_theme("dark-blue")
-
-root = customtkinter.CTk()
-root.geometry("600x400")
-root.title("PageRank")
-root.resizable(False, False)
-
-
-frame = customtkinter.CTkFrame(master=root, width=500, height=300)
-frame.pack(pady=20, padx=20, fill="both", expand=True)
-
-label_1 = customtkinter.CTkLabel(master = frame, text="PageRank", font=('Roboto', 44))
-label_1.pack(pady=12, padx=10)
-label_2 = customtkinter.CTkLabel(master = frame, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
-label_2.pack(pady=2, padx=10)
-label_3 = customtkinter.CTkLabel(master = frame, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
-label_3.pack(pady=2, padx=10)
-label_4 = customtkinter.CTkLabel(master = frame, text="Оберіть турнір", font=('Roboto', 24))
-label_4.pack(pady=16, padx=10)
-
-def start_button():
-    new_window = customtkinter.CTkToplevel(root)
-    new_window.title("PageRank")
-    new_window.geometry("900x700")
-    new_window.resizable(False, False)
-    frame_ = customtkinter.CTkFrame(master=new_window, width=600, height=600)
-    frame_.pack(pady=20, padx=20, fill="both", expand=True)
-
-    label_5 = customtkinter.CTkLabel(master = frame_, text="PageRank", font=('Roboto', 44))
-    label_5.place(y=18, x=114)
-    label_6 = customtkinter.CTkLabel(master = frame_, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
-    label_6.place(y=84, x=32)
-    label_7 = customtkinter.CTkLabel(master = frame_, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
-    label_7.place(y=114, x=80)
-    label_8 = customtkinter.CTkLabel(master = frame_, text="Турнір 1", font=('Roboto', 24))
-    label_8.place(y=148, x=150)
-
-
-optio_1 = customtkinter.CTkOptionMenu(master=frame, values=["Турнір 1", "Турнір 2"])
-optio_1.pack(pady=10)
-button_1 = customtkinter.CTkButton(master=frame, text="START",
-                                    width=200, height=40,
-                                    command=start_button, corner_radius=50)
-button_1.pack(pady=20)
-
-def graph_image():
-    pass
-
-root.mainloop()
-
-
-
 def main():
     '''
     Main function
@@ -227,9 +168,74 @@ def main():
             print(i)
 
 
-main()
+# main()
+
+customtkinter.set_appearance_mode("system")
+customtkinter.set_default_color_theme("dark-blue")
+
+root = customtkinter.CTk()
+root.geometry("600x400")
+root.title("PageRank")
+root.resizable(False, False)
 
 
+frame = customtkinter.CTkFrame(master=root, width=500, height=300)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+label_1 = customtkinter.CTkLabel(master = frame, text="PageRank", font=('Roboto', 44))
+label_1.pack(pady=12, padx=10)
+label_2 = customtkinter.CTkLabel(master = frame, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
+label_2.pack(pady=2, padx=10)
+label_3 = customtkinter.CTkLabel(master = frame, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
+label_3.pack(pady=2, padx=10)
+label_4 = customtkinter.CTkLabel(master = frame, text="Оберіть турнір", font=('Roboto', 24))
+label_4.pack(pady=16, padx=10)
+
+
+def to_table(raw_prs: dict, page_ranks: dict, players_countries: dict) -> None:
+    with open('tournament.csv', 'w', encoding='utf-8') as file:
+        for name in page_ranks.keys():
+            line = ','.join(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
+            file.write(line + '\n')
+
+def start_button():
+    file_path = d[optio_1.get()]
+    tournament_name, players_countries, games = read_file(file_path)
+    games = to_dict(games)
+    raw_prs = page_rank(games)
+    page_ranks = sort_by_rank(raw_prs)
+
+    to_table(raw_prs, page_ranks, players_countries)
+
+    # new_window.title("PageRank")
+    # new_window.geometry("900x700")
+    # new_window.resizable(False, False)
+    # frame_ = customtkinter.CTkFrame(master=new_window, width=600, height=600)
+    # frame_.pack(pady=20, padx=20, fill="both", expand=True)
+
+    # label_5 = customtkinter.CTkLabel(master = frame_, text="PageRank", font=('Roboto', 44))
+    # label_5.place(y=18, x=114)
+    # label_6 = customtkinter.CTkLabel(master = frame_, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
+    # label_6.place(y=84, x=32)
+    # label_7 = customtkinter.CTkLabel(master = frame_, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
+    # label_7.place(y=114, x=80)
+    # label_8 = customtkinter.CTkLabel(master = frame_, text="Турнір 1", font=('Roboto', 24))
+    # label_8.place(y=148, x=150)
+
+mas = ['tournament_2.txt']
+d = get_tournaments_dict(mas)
+
+optio_1 = customtkinter.CTkOptionMenu(master=frame, values=list(d.keys()))
+optio_1.pack(pady=10)
+button_1 = customtkinter.CTkButton(master=frame, text="START",
+                                    width=200, height=40,
+                                    command=start_button, corner_radius=50)
+button_1.pack(pady=20)
+
+def graph_image():
+    pass
+
+root.mainloop()
 if __name__ == '__main__':
     import doctest
     print(doctest.testmod())
