@@ -233,7 +233,7 @@ def start_button():
 
 
 
-mas = ['tournament_2.txt']
+mas = ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']
 d = get_tournaments_dict(mas)
 
 optio_1 = customtkinter.CTkOptionMenu(master=frame, values=list(d.keys()))
