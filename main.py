@@ -8,6 +8,9 @@
 #             black.append(line)
 # print(white)
 # print(black)
+import customtkinter
+from PIL import Image, ImageTk
+
 
 
 def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[str, str]]]:
@@ -145,6 +148,61 @@ def sort_by_rank(bench: dict) -> dict[str, int]:
     items = sorted(bench.items(), key=lambda x: x[-1][-1])
     dt = {item[0]: i for i, item in enumerate(items, 1)}
     return dt
+
+
+
+
+customtkinter.set_appearance_mode("system")
+customtkinter.set_default_color_theme("dark-blue")
+
+root = customtkinter.CTk()
+root.geometry("600x400")
+root.title("PageRank")
+root.resizable(False, False)
+
+
+frame = customtkinter.CTkFrame(master=root, width=500, height=300)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+label_1 = customtkinter.CTkLabel(master = frame, text="PageRank", font=('Roboto', 44))
+label_1.pack(pady=12, padx=10)
+label_2 = customtkinter.CTkLabel(master = frame, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
+label_2.pack(pady=2, padx=10)
+label_3 = customtkinter.CTkLabel(master = frame, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
+label_3.pack(pady=2, padx=10)
+label_4 = customtkinter.CTkLabel(master = frame, text="Оберіть турнір", font=('Roboto', 24))
+label_4.pack(pady=16, padx=10)
+
+def start_button():
+    new_window = customtkinter.CTkToplevel(root)
+    new_window.title("PageRank")
+    new_window.geometry("900x700")
+    new_window.resizable(False, False)
+    frame_ = customtkinter.CTkFrame(master=new_window, width=600, height=600)
+    frame_.pack(pady=20, padx=20, fill="both", expand=True)
+
+    label_5 = customtkinter.CTkLabel(master = frame_, text="PageRank", font=('Roboto', 44))
+    label_5.place(y=18, x=114)
+    label_6 = customtkinter.CTkLabel(master = frame_, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
+    label_6.place(y=84, x=32)
+    label_7 = customtkinter.CTkLabel(master = frame_, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
+    label_7.place(y=114, x=80)
+    label_8 = customtkinter.CTkLabel(master = frame_, text="Турнір 1", font=('Roboto', 24))
+    label_8.place(y=148, x=150)
+
+
+optio_1 = customtkinter.CTkOptionMenu(master=frame, values=["Турнір 1", "Турнір 2"])
+optio_1.pack(pady=10)
+button_1 = customtkinter.CTkButton(master=frame, text="START",
+                                    width=200, height=40,
+                                    command=start_button, corner_radius=50)
+button_1.pack(pady=20)
+
+def graph_image():
+    pass
+
+root.mainloop()
+
 
 
 def main():
