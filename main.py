@@ -205,6 +205,9 @@ def clear_frame(frame):
         if widget != optio_1 and widget != button_1 and widget != label_2 and widget != label_3 and widget != label_4:
             widget.destroy()
 
+        
+
+
 
 def start_button():
     file_path = d[optio_1.get()]
@@ -217,7 +220,6 @@ def start_button():
 
     clear_frame(frame)
 
-    table = ttk.Treeview(root, columns=('Країна', 'При', 'місце', 'page'), show="headings")
     table.heading('Країна', text="Країна")
     table.heading('При', text="Країна")
     table.heading('місце', text="Країна")
@@ -230,7 +232,7 @@ def start_button():
         table.insert(parent='', index=n, values= line)
         n += 1
 
-
+table = ttk.Treeview(root, columns=('Країна', 'При', 'місце', 'page'), show="headings")
 
 
 mas = ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']
