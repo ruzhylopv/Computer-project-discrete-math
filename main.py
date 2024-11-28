@@ -222,7 +222,7 @@ def start_button():
     # label_8 = customtkinter.CTkLabel(master = frame_, text="Турнір 1", font=('Roboto', 24))
     # label_8.place(y=148, x=150)
 
-mas = ['tournament_2.txt']
+mas = ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']
 d = get_tournaments_dict(mas)
 
 optio_1 = customtkinter.CTkOptionMenu(master=frame, values=list(d.keys()))
