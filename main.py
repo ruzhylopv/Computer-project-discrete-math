@@ -10,6 +10,8 @@
 # print(black)
 import customtkinter
 from PIL import Image, ImageTk
+# import tkinter as tk
+from tkinter import ttk
 
 
 
@@ -180,7 +182,7 @@ root.resizable(False, False)
 
 
 frame = customtkinter.CTkFrame(master=root, width=500, height=300)
-frame.pack(pady=20, padx=20, fill="both", expand=True)
+frame.pack(pady=20, padx=20, fill="both")
 
 label_1 = customtkinter.CTkLabel(master = frame, text="PageRank", font=('Roboto', 44))
 label_1.pack(pady=12, padx=10)
@@ -198,6 +200,12 @@ def to_table(raw_prs: dict, page_ranks: dict, players_countries: dict) -> None:
             line = ','.join(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
             file.write(line + '\n')
 
+def clear_frame(frame):
+    for widget in frame.winfo_children():
+        if widget != optio_1 and widget != button_1 and widget != label_2 and widget != label_3 and widget != label_4:
+            widget.destroy()
+
+
 def start_button():
     file_path = d[optio_1.get()]
     tournament_name, players_countries, games = read_file(file_path)
@@ -207,20 +215,23 @@ def start_button():
 
     to_table(raw_prs, page_ranks, players_countries)
 
-    # new_window.title("PageRank")
-    # new_window.geometry("900x700")
-    # new_window.resizable(False, False)
-    # frame_ = customtkinter.CTkFrame(master=new_window, width=600, height=600)
-    # frame_.pack(pady=20, padx=20, fill="both", expand=True)
+    clear_frame(frame)
 
-    # label_5 = customtkinter.CTkLabel(master = frame_, text="PageRank", font=('Roboto', 44))
-    # label_5.place(y=18, x=114)
-    # label_6 = customtkinter.CTkLabel(master = frame_, text="Оптимізована турнірна таблиця", font=('Roboto', 24))
-    # label_6.place(y=84, x=32)
-    # label_7 = customtkinter.CTkLabel(master = frame_, text="Chess Tournament", text_color="blue", font=('Roboto', 30))
-    # label_7.place(y=114, x=80)
-    # label_8 = customtkinter.CTkLabel(master = frame_, text="Турнір 1", font=('Roboto', 24))
-    # label_8.place(y=148, x=150)
+    table = ttk.Treeview(root, columns=('Країна', 'При', 'місце', 'page'), show="headings")
+    table.heading('Країна', text="Країна")
+    table.heading('При', text="Країна")
+    table.heading('місце', text="Країна")
+    table.heading('page', text="Країна")
+    table.pack( fill='both', expand=True)
+
+    n = 0
+    for name in page_ranks.keys():
+        line = list(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
+        table.insert(parent='', index=n, values= line)
+        n += 1
+
+
+
 
 mas = ['tournament_2.txt']
 d = get_tournaments_dict(mas)
