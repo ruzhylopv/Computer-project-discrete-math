@@ -220,19 +220,21 @@ def start_button():
 
     clear_frame(frame)
 
-    table.heading('Країна', text="Країна")
-    table.heading('При', text="Країна")
-    table.heading('місце', text="Країна")
-    table.heading('page', text="Країна")
+    table.heading('Country', text="Country")
+    table.heading('Name', text="Name")
+    table.heading('PR', text="PR")
+    table.heading('Raw', text="Data")
     table.pack( fill='both', expand=True)
 
-    n = 0
-    for name in page_ranks.keys():
+    # n = 0
+    for row in table.get_children():
+        table.delete(row)
+    for n, name in enumerate(page_ranks.keys()):
         line = list(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
         table.insert(parent='', index=n, values= line)
-        n += 1
+        # n += 1
 
-table = ttk.Treeview(root, columns=('Країна', 'При', 'місце', 'page'), show="headings")
+table = ttk.Treeview(root, columns=('Country', 'Name', 'PR', 'Raw'), show="headings")
 
 
 mas = ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']
