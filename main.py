@@ -12,6 +12,8 @@ import customtkinter
 from PIL import Image, ImageTk
 # import tkinter as tk
 from tkinter import ttk
+import networkx as nx #використовується для створення та обробки графів
+import matplotlib.pyplot as plt #для візуалізації графів
 
 
 
@@ -53,6 +55,24 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
                     case '½':
                         games.append((players[i][0], players[j][0]))
         return (tournament_name, dict(players), games)
+
+def graph_visualize(games: list[tuple[str,str]]):
+    """
+    Visualize a directed graph of tournaments that shows who won and who lost.
+    :param games: list of two tuples, each containing two players, the second of which is the winner.
+    :returns: a visualized graph
+    """
+    # di = directed graph
+    G = nx.DiGraph()
+    G.add_edges_from(games)
+    print("Nodes (Players):", G.nodes()) #вузли
+    print("Edges (Results):", G.edges()) #ребра
+    pos = nx.spring_layout(G)  #автоматично розташовує вузли графа так, щоб вони виглядали добре
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=3000, edge_color='gray', arrowsize=20)
+    edge_labels = {(u, v): f"{u}→{v}" for u, v in G.edges()}
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red')
+    plt.title("Game Results Graph")
+    plt.show()
 
 
 def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]]:
