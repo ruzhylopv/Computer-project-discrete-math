@@ -226,13 +226,11 @@ def start_button():
     table.heading('Raw', text="Data")
     table.pack( fill='both', expand=True)
 
-    # n = 0
     for row in table.get_children():
         table.delete(row)
     for n, name in enumerate(page_ranks.keys()):
         line = list(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
         table.insert(parent='', index=n, values= line)
-        # n += 1
 
 table = ttk.Treeview(root, columns=('Country', 'Name', 'PR', 'Raw'), show="headings")
 
