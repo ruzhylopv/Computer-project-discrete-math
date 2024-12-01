@@ -32,7 +32,7 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
 
     pos = nx.spring_layout(G, k=0.8, iterations=100) #гарно розсташовує вузли
     nx.draw_networkx_labels(G, pos, font_size=6, font_color=(0.204, 0.153, 0.255, 1), bbox=dict(facecolor="white", alpha=0.5))
-    nx.draw(G, pos, with_labels=False, node_color=node_colors, node_size=1500, edge_color='gray', arrowsize=20)
+    nx.draw(G, pos, with_labels=False, node_color=node_colors, node_size=1500, edge_color='gray', arrowsize=10)
 
     plt.savefig(filename, format="PNG") #зберігає у файлику
     # plt.show() #відкриває у вікні (опційна штука)
