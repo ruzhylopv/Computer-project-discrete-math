@@ -249,7 +249,7 @@ def main_screen():
     '''
     Initializes main screen
     '''
-    root.geometry("1000x600")
+    root.geometry("800x600")
     selected_file = d[file_menu.get()]
     clear_frame(root)
 
@@ -292,7 +292,7 @@ if __name__ == '__main__':
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("dark-blue")
     root = ctk.CTk()
-    root.geometry("600x400")
+    # root.geometry("600x400")
     root.title("PageRank")
     root.iconbitmap('images/graphimage.ico')
     root.resizable(True, True)
