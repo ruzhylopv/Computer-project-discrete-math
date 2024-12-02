@@ -360,7 +360,7 @@ def main():
     import doctest
     print(doctest.testmod())
     global tournaments
-    tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']))
+    tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt', 'tournament_5.txt', 'tournament_6.txt', 'tournament_7.txt']))
     global d
     d = get_tournaments_dict(tournaments)
     ctk.set_appearance_mode("system")

@@ -1,0 +1,14 @@
+FIDE Women's Grand Prix 2024/25 - Second Leg, Shymkent
+
+Final Ranking crosstable after 9 Rounds
+Rk.	 		Name	Rtg	FED	1	2	3	4	5	6	7	8	9	10	Pts.	 TB1 	 TB2 	 TB3 	 TB4 	 TB5 
+1		GM	Goryachkina, Aleksandra	2533	FID	*	1	½	1	½	1	½	½	1	1	7	5	29,50	5	0	0
+2		GM	Tan, Zhongyi	2551	CHN	0	*	½	1	½	½	1	1	1	1	6,5	4	24,50	5	0	0
+3		IM	Assaubayeva, Bibisara	2487	KAZ	½	½	*	½	1	½	0	1	½	½	5	5	22,00	2	0	0
+4		IM	Tsolakidou, Stavroula	2439	GRE	0	0	½	*	1	½	½	½	1	1	5	5	18,00	3	0	0
+5		GM	Koneru, Humpy	2530	IND	½	½	0	0	*	½	½	1	½	1	4,5	5	18,25	2	0	0
+6		IM	Divya, Deshmukh	2501	IND	0	½	½	½	½	*	½	½	½	1	4,5	4	18,00	1	0	0
+7		GM	Lagno, Kateryna	2527	FID	½	0	1	½	½	½	*	½	½	0	4	4	18,50	1	0	0
+8		IM	Salimova, Nurgyul	2405	BUL	½	0	0	½	0	½	½	*	½	1	3,5	4	14,00	1	0	0
+9		GM	Paehtz, Elisabeth	2458	GER	0	0	½	0	½	½	½	½	*	0	2,5	5	10,75	0	0	0
+10		IM	Munguntuul, Batkhuyag	2344	MGL	0	0	½	0	0	0	1	0	1	*	2,5	4	9,00	2	0	0
