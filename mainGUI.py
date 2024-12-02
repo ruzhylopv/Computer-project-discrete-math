@@ -20,22 +20,37 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
     """
     plt.close()
     plt.figure(figsize=(4, 4))
-    G = nx.DiGraph() # di = directed
+    G = nx.DiGraph()
 
     G.add_nodes_from(list(prs.keys()))
-    G.add_edges_from(games) #створюємо список пар на основі рангу/edges
-    # in_degrees = dict(G.in_degree()) #словник, що містить кількість вхідних стрілок для кожного вузлика
-    max_pr = max(prs.values()) #максимальний ін-дегрі серед усіх гравців
-    norm = mcolors.Normalize(vmin=0, vmax=max_pr) #створює нормалізатор, який перетворює значення ін-дегрі у діапазон від 0 до максимального ін-дегрі, щоб мати можливість коректно присвоїти кольори
-    
-    node_colors = [(0.204, 0.153, 0.255, max(0.4, norm(prs[node]))) for node in G.nodes()] # використовує RGB для визначення прозорості (мінімальна 0.5)
+    G.add_edges_from(games)
+    max_pr = max(prs.values())
+    norm = mcolors.Normalize(vmin=0, vmax=max_pr)
 
-    pos = nx.spring_layout(G, k=0.8, iterations=100) #гарно розсташовує вузли
+
+    cmap = plt.cm.viridis_r
+    # node_colors = [max(0.4, cmap(norm(prs[node]))) for node in G.nodes()]
+    # node_colors = [(0.204, 0.153, 0.255, max(0.4, norm(prs[node]))) for node in G.nodes()]
+
+    node_colors = []
+    for node in G.nodes():
+        rgba = list(cmap(norm(prs[node])))  # Get the RGBA color
+        rgba[3] = min(0.6, rgba[3])
+        # rgba[2] = 0.7      # Ensure a minimum alpha of 0.4
+        node_colors.append(tuple(rgba))
+    
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+    sm.set_array([])  # Needed to create a ScalarMappable object for the color bar
+    cbar = plt.colorbar(sm, ax=plt.gca(), fraction=0.03, pad=0.02)  # Attach color bar to the current Axes
+
+    pos = nx.spring_layout(G, k=0.8, iterations=100)
+
+
     nx.draw_networkx_labels(G, pos, font_size=6, font_color=(0.204, 0.153, 0.255, 1), bbox=dict(facecolor="white", alpha=0.5))
     nx.draw(G, pos, with_labels=False, node_color=node_colors, node_size=1500, edge_color='gray', arrowsize=10)
 
-    plt.savefig(filename, format="PNG") #зберігає у файлику
-    # plt.show() #відкриває у вікні (опційна штука)
+    plt.savefig(filename, format="PNG")
+
 
 
 
@@ -52,14 +67,11 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
 def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[str, str]]]:
     '''
     Read file with a tournament data and return a tuple with a tournament
-    name, players information and games results.
+    name, players information (their countries) and games results.
 
     :param file_path: str, a path to the file, where tournament data is
     stored.
     :return: tuple[str, list[tuple[str, str]], list[tuple[str, str]]],
-    a tuple with a tournament name the players info and the games results,
-    in the format of tuples, where the first element is a winner, and the
-    second, a loser.
     '''
     # (['s', 'ds', 'dh ff', 'kjscha'], [('a', 'b'), ('c', 'd')])
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -219,7 +231,7 @@ def load_table_and_graph(file_path):
     for row in table.get_children():
         table.delete(row)
 
-    _, players_countries, games = read_file(file_path)
+    tournament_name, players_countries, games = read_file(file_path)
     # graph_visualize(games)
     dict_games = to_dict(games)
     raw_prs = page_rank(dict_games)
@@ -252,7 +264,6 @@ def main_screen():
     root.geometry("800x600")
     selected_file = d[file_menu.get()]
     clear_frame(root)
-
     style = ttk.Style()
     style.configure('Treeview', font=('Roboto', 14))
 
@@ -282,15 +293,17 @@ def main_screen():
     # Main screen button
     ctk.CTkButton(root, text="Back", command=start_screen).pack(pady=10)
 
-
-if __name__ == '__main__':
+def main():
     import doctest
     print(doctest.testmod())
+    global tournaments
     tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']))
+    global d
     d = get_tournaments_dict(tournaments)
     # graph_visualize
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("dark-blue")
+    global root
     root = ctk.CTk()
     # root.geometry("600x400")
     root.title("PageRank")
@@ -298,3 +311,20 @@ if __name__ == '__main__':
     root.resizable(True, True)
     start_screen()
     root.mainloop()
+
+if __name__ == '__main__':
+    main()
+    # import doctest
+    # print(doctest.testmod())
+    # tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']))
+    # d = get_tournaments_dict(tournaments)
+    # # graph_visualize
+    # ctk.set_appearance_mode("system")
+    # ctk.set_default_color_theme("dark-blue")
+    # root = ctk.CTk()
+    # # root.geometry("600x400")
+    # root.title("PageRank")
+    # root.iconbitmap('images/graphimage.ico')
+    # root.resizable(True, True)
+    # start_screen()
+    # root.mainloop()
