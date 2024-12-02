@@ -34,14 +34,13 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
 
     node_colors = []
     for node in G.nodes():
-        rgba = list(cmap(norm(prs[node])))  # Get the RGBA color
+        rgba = list(cmap(norm(prs[node])))
         rgba[3] = min(0.6, rgba[3])
-        # rgba[2] = 0.7      # Ensure a minimum alpha of 0.4
         node_colors.append(tuple(rgba))
     
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])  # Needed to create a ScalarMappable object for the color bar
-    cbar = plt.colorbar(sm, ax=plt.gca(), fraction=0.03, pad=0.02)  # Attach color bar to the current Axes
+    sm.set_array([])
+    cbar = plt.colorbar(sm, ax=plt.gca(), fraction=0.03, pad=0.02)
 
     pos = nx.spring_layout(G, k=0.8, iterations=100)
 
@@ -190,10 +189,31 @@ def get_tournaments_dict(tournament_file_paths_list: list[str]) -> dict[str, str
 
 # ---------- UI TOOL FUNCTIONS --------------#
 def clear_frame(frame):
+    """
+     Clears all widgets from a frame.
+
+    This function iterates through all the widgets of the frame
+    and destroys them.
+
+    Parameters:
+    frame (tk.Frame): The frame whose widgets will be cleared.
+
+    Returns:
+    None
+    """
     for widget in frame.winfo_children():
         widget.destroy()
 
 def show_graph():
+    """
+    Displays a graphical image in the application window.
+
+    This function loads an image of a graph from the file path 'images/graph.png'
+    and displays it as a label in the main application window. 
+
+    Returns:
+    None
+    """
     global graph_label
     graph = Image.open('images/graph.png')
     graph_image = ctk.CTkImage(light_image= graph, size=(400, 400))
@@ -202,6 +222,15 @@ def show_graph():
     graph_label.pack(pady=10, side='bottom')
 
 def remove_graph():
+    """
+    Removes the displayed graph image from the application window.
+
+    This function checks if the `graph_label` widget exists, and if so,
+    destroys it to remove the graph image from the window.
+
+    Returns:
+    None
+    """
     global graph_label
     if graph_label != None:
         graph_label.destroy()
@@ -211,6 +240,14 @@ def remove_graph():
 
 # ------------UI WINDOW FUNCTIONS----------------#
 def start_screen():
+    """
+    Initializes the start screen of the application.
+
+    This function sets up the main interface for the user to select a file and start the PageRank algorithm.
+
+    Returns:
+    None
+    """
 
     root.geometry("600x400")
     clear_frame(root)
@@ -225,14 +262,26 @@ def start_screen():
 
 def load_table_and_graph(file_path):
     '''
-    Fills up the table with data.
+    Loads data from a file, processes it, and updates the tournament table and graph.
+
+    This function:
+    1. Clears the current table.
+    2. Reads the tournament data from the provided file path.
+    3. Processes the data to calculate player ranks using PageRank and visualizes the data as a graph.
+    4. Saves the processed data to a CSV file (`tournament.csv`).
+    5. Populates the table with data from the CSV file.
+    6. Displays the graph on the UI.
+
+    Parameters:
+    file_path (str): Path to the file containing tournament data.
+
+    Returns:
+    None
     '''
-    # Clear previous table
     for row in table.get_children():
         table.delete(row)
 
     tournament_name, players_countries, games = read_file(file_path)
-    # graph_visualize(games)
     dict_games = to_dict(games)
     raw_prs = page_rank(dict_games)
     global page_ranks
@@ -259,7 +308,10 @@ def load_table_and_graph(file_path):
 
 def main_screen():
     '''
-    Initializes main screen
+    Initializes and displays the main screen of the application.
+
+    Returns:
+    None
     '''
     root.geometry("800x600")
     selected_file = d[file_menu.get()]
@@ -271,7 +323,6 @@ def main_screen():
     global table
     table = ttk.Treeview(root, columns=("Country", "Name", "PR", "Raw Data"), show="headings")
     table.pack(fill="both", expand=False, padx=10, pady=10, side='left')
-    # Configure each column of a table
     table.column("Country", width=70)
     table.column("Name", width=300)
     table.column("PR", width=70)
@@ -281,31 +332,32 @@ def main_screen():
         table.heading(col, text=col)
 
     global graph_label
-    graph_label = None #will later be asigned with load_table_and_graph
+    graph_label = None 
 
     load_table_and_graph(selected_file)
-    # Drop-down menu for the choice of files
     ctk.CTkLabel(root, text="Choose another tournament:", font=("Roboto", 14)).pack(pady=5)
     switch_menu = ctk.CTkOptionMenu(root, values=list(d.keys()))
     switch_menu.pack(pady=10)
-    # Parse button
     ctk.CTkButton(root, text='Parse', command=lambda: load_table_and_graph(d[switch_menu.get()])).pack(pady=10, side='top')
-    # Main screen button
     ctk.CTkButton(root, text="Back", command=start_screen).pack(pady=10)
 
 def main():
+    """
+    The main function that runs the application.
+
+    Returns:
+    None
+    """
     import doctest
     print(doctest.testmod())
     global tournaments
     tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']))
     global d
     d = get_tournaments_dict(tournaments)
-    # graph_visualize
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("dark-blue")
     global root
     root = ctk.CTk()
-    # root.geometry("600x400")
     root.title("PageRank")
     root.iconbitmap('images/graphimage.ico')
     root.resizable(True, True)
@@ -314,17 +366,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # import doctest
-    # print(doctest.testmod())
-    # tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt']))
-    # d = get_tournaments_dict(tournaments)
-    # # graph_visualize
-    # ctk.set_appearance_mode("system")
-    # ctk.set_default_color_theme("dark-blue")
-    # root = ctk.CTk()
-    # # root.geometry("600x400")
-    # root.title("PageRank")
-    # root.iconbitmap('images/graphimage.ico')
-    # root.resizable(True, True)
-    # start_screen()
-    # root.mainloop()
