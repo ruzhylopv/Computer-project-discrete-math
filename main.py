@@ -12,6 +12,9 @@ import customtkinter
 from PIL import Image, ImageTk
 # import tkinter as tk
 from tkinter import ttk
+import networkx as nx #використовується для створення та обробки графів
+import matplotlib.pyplot as plt #для візуалізації графів
+import matplotlib.colors as mcolors # робота з кольорами
 import csv
 
 
@@ -56,7 +59,6 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
                     case '½':
                         games.append((players[i][0], players[j][0]))
         return (tournament_name, dict(players), games)
-
 
 def to_dict(games: list[tuple[str, str]]) -> dict[str, tuple[set[str], set[str]]]:
     '''
@@ -158,6 +160,37 @@ def sort_by_rank(bench: dict) -> dict[str, int]:
     items = sorted(bench.items(), key=lambda x: -x[-1][-1])
     dt = {item[0]: len(items) - i + 1 for i, item in enumerate(items, 1)}
     return dt
+
+def graph_visualize(rankings: dict, filename: str = "graph.png"):
+    """
+    Visualize a directed graph of tournaments, showing who won and who lost,
+    with nodes colored based on the number of arrows going into them (in-degree),
+    keeping the same hue but varying intensity.
+    The graph is saved as a PNG image.
+    :param rankings: dictionary where keys are players and values are their ranks (lower rank means higher skill).
+    :param filename: The name of the file to save the image (default is 'graph.png').
+    :returns: None
+    """
+    if not filename.lower().endswith('.png'):
+        filename += '.png'
+    games = [(winner, loser) for winner in rankings for loser in rankings if rankings[winner] < rankings[loser]]
+    G = nx.DiGraph() # di = directed
+    G.add_edges_from(games) #створюємо список пар на основі рангу/edges
+    in_degrees = dict(G.in_degree()) #словник, що містить кількість вхідних стрілок для кожного вузлика
+    max_in_degree = max(in_degrees.values()) #максимальний ін-дегрі серед усіх гравців
+    norm = mcolors.Normalize(vmin=0, vmax=max_in_degree) #створює нормалізатор, який перетворює значення ін-дегрі у діапазон від 0 до максимального ін-дегрі, щоб мати можливість коректно присвоїти кольори
+    node_colors = [(0, 0, 1, max(0.5, norm(in_degrees[node]))) for node in G.nodes()] # використовує RGB для визначення прозорості (мінімальна 0.5)
+    print("Players:", G.nodes())
+    print("Results:", G.edges())
+    print(in_degrees)
+    pos = nx.spring_layout(G) #гарно розсташовує вузли
+    nx.draw(G, pos, with_labels=True, node_color=node_colors, node_size=3000, edge_color='gray', arrowsize=20)
+    plt.title("Game Results Graph with Node Intensity by In-Degree")
+
+    plt.savefig(filename, format="PNG") #зберігає у файлику
+    print(f"Graph saved as {filename}")
+    plt.show() #відкриває у вікні (опційна штука)
+
 def main():
     '''
     Main function
