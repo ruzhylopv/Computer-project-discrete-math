@@ -1,3 +1,15 @@
+'''
+A Discrete math project:
+"PAGE RANK: Optimized tournament table."
+Collaborators:
+- Pavlo Ruzhylo
+- Olexandr Tsybrivskyy
+- Sophia Mandryk
+- Olena Dovbenchuk
+- Maksym Matseliukh
+'''
+
+
 import customtkinter as ctk
 from tkinter import ttk
 import csv
@@ -16,7 +28,8 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
     with nodes colored based on the number of arrows going into them (in-degree),
     keeping the same hue but varying intensity.
     The graph is saved as a PNG image.
-    :param rankings: dictionary where keys are players and values are their ranks (higher rank means higher skill).
+    :param rankings: dictionary where keys are players \
+    and values are their ranks (higher rank means higher skill).
     :param filename: The name of the file to save the image (default is 'graph.png').
     :returns: None
     """
@@ -31,9 +44,6 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
 
 
     cmap = plt.cm.viridis_r
-    # node_colors = [max(0.4, cmap(norm(prs[node]))) for node in G.nodes()]
-    # node_colors = [(0.204, 0.153, 0.255, max(0.4, norm(prs[node]))) for node in G.nodes()]
-
     node_colors = []
     for node in G.nodes():
         rgba = list(cmap(norm(prs[node])))
@@ -47,8 +57,10 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
     pos = nx.spring_layout(G, k=0.8, iterations=100)
 
 
-    nx.draw_networkx_labels(G, pos, font_size=6, font_color=(0.204, 0.153, 0.255, 1), bbox=dict(facecolor="white", alpha=0.5))
-    nx.draw(G, pos, with_labels=False, node_color=node_colors, node_size=1500, edge_color='gray', arrowsize=10)
+    nx.draw_networkx_labels(G, pos, font_size=6, font_color=(0.204, 0.153, 0.255, 1),
+                            bbox=dict(facecolor="white", alpha=0.5))
+    nx.draw(G, pos, with_labels=False, node_color=node_colors,
+            node_size=1500, edge_color='gray', arrowsize=10)
 
     plt.savefig(filename, format="PNG")
 
@@ -74,7 +86,6 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
     stored.
     :return: tuple[str, list[tuple[str, str]], list[tuple[str, str]]],
     '''
-    # (['s', 'ds', 'dh ff', 'kjscha'], [('a', 'b'), ('c', 'd')])
     with open(file_path, 'r', encoding='utf-8') as file:
         tournament_name = file.readline().strip()
         file.readline()
@@ -226,7 +237,7 @@ def show_graph():
     global graph_label
     graph = Image.open('images/graph.png')
     graph_image = ctk.CTkImage(light_image= graph, size=(400, 400))
-    
+
     graph_label = ctk.CTkLabel(master=root, image=graph_image, text='')
     graph_label.pack(pady=10, side='bottom')
 
@@ -241,7 +252,7 @@ def remove_graph():
     None
     """
     global graph_label
-    if graph_label != None:
+    if graph_label is not None:
         graph_label.destroy()
         graph_label = None
 
@@ -252,7 +263,8 @@ def start_screen():
     """
     Initializes the start screen of the application.
 
-    This function sets up the main interface for the user to select a file and start the PageRank algorithm.
+    This function sets up the main interface for the
+    user to select a file and start the PageRank algorithm.
 
     Returns:
     None
@@ -260,7 +272,8 @@ def start_screen():
 
     root.geometry("600x400")
     clear_frame(root)
-    ctk.CTkLabel(root, text="Optimized tournament table\nChoose a file:", font=("Roboto", 24)).pack(pady=20)
+    ctk.CTkLabel(root, text="Optimized tournament table\nChoose a file:",
+                 font=("Roboto", 24)).pack(pady=20)
 
     global file_menu
     file_menu = ctk.CTkOptionMenu(root, values=list(d.keys()))
@@ -276,7 +289,8 @@ def load_table_and_graph(file_path):
     This function:
     1. Clears the current table.
     2. Reads the tournament data from the provided file path.
-    3. Processes the data to calculate player ranks using PageRank and visualizes the data as a graph.
+    3. Processes the data to calculate player ranks using
+    PageRank and visualizes the data as a graph.
     4. Saves the processed data to a CSV file (`tournament.csv`).
     5. Populates the table with data from the CSV file.
     6. Displays the graph on the UI.
@@ -304,7 +318,8 @@ def load_table_and_graph(file_path):
     with open('tournament.csv', 'w', encoding='utf-8') as file:
         file.write('Country,Name,PR,Raw Data\n')
         for name in page_ranks.keys():
-            line = ','.join(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
+            line = ','.join(map(str, [players_countries[name], name,
+                                      page_ranks[name], round(raw_prs[name][-1], 3)]))
             file.write(line + '\n')
 
     with open('tournament.csv', 'r', encoding='utf-8') as file:
@@ -360,7 +375,9 @@ def main():
     import doctest
     print(doctest.testmod())
     global tournaments
-    tournaments = list(map(lambda x: 'tournaments/' + x, ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt', 'tournament_5.txt', 'tournament_6.txt', 'tournament_7.txt']))
+    tournaments = list(map(lambda x: 'tournaments/' + x,
+        ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt',
+         'tournament_5.txt', 'tournament_6.txt', 'tournament_7.txt']))
     global d
     d = get_tournaments_dict(tournaments)
     ctk.set_appearance_mode("system")
