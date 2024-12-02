@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 
+PAGE_RANK_DELTA = 0.01
+
 
 def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
     """
