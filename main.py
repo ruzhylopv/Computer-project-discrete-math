@@ -12,6 +12,7 @@ import customtkinter
 from PIL import Image, ImageTk
 # import tkinter as tk
 from tkinter import ttk
+import csv
 
 
 PAGE_RANK_DELTA = 0.01
@@ -205,6 +206,7 @@ label_4.pack(pady=16, padx=10)
 
 def to_table(raw_prs: dict, page_ranks: dict, players_countries: dict) -> None:
     with open('tournament.csv', 'w', encoding='utf-8') as file:
+        file.write('Country,Name,PR,Raw Data\n')
         for name in page_ranks.keys():
             line = ','.join(map(str, [players_countries[name], name, page_ranks[name], round(raw_prs[name][-1], 3)]))
             file.write(line + '\n')
@@ -213,9 +215,6 @@ def clear_frame(frame):
     for widget in frame.winfo_children():
         if widget != optio_1 and widget != button_1 and widget != label_2 and widget != label_3 and widget != label_4:
             widget.destroy()
-
-        
-
 
 
 def start_button():
@@ -226,9 +225,8 @@ def start_button():
     page_ranks = sort_by_rank(raw_prs)
 
     to_table(raw_prs, page_ranks, players_countries)
-
+    # print(open('tournament.csv').read())
     clear_frame(frame)
-
     table.heading('Country', text="Country")
     table.heading('Name', text="Name")
     table.heading('PR', text="PR")
