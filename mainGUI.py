@@ -118,10 +118,17 @@ def page_rank(graph: dict) -> dict[str, list[int]]:
 'C': [0.25, 0.375, 0.375]}
     '''
     page_ranks = {key: [1/len(graph)] for key in graph}
-    for i in range(1, 3):
+    ind = True
+    i = 1
+    while ind:
         for key in graph:
             sum_ = sum((page_ranks[vertex][i-1]/len(graph[vertex][0]) for vertex in graph[key][1]))
             page_ranks[key] += [sum_]
+        ind = False
+        for player_page_rank in page_ranks.values():
+            if abs(player_page_rank[-1] - player_page_rank[-2]) > PAGE_RANK_DELTA:
+                ind = True
+        i += 1
     return page_ranks
 
 def sort_by_rank(bench: dict) -> dict[str, int]:
