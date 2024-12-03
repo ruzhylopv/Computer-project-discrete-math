@@ -85,6 +85,9 @@ def read_file(file_path: str) -> tuple[str, list[tuple[str, str]], list[tuple[st
     :param file_path: str, a path to the file, where tournament data is
     stored.
     :return: tuple[str, list[tuple[str, str]], list[tuple[str, str]]],
+    a tuple with a tournament name, the players info, and the games results,
+    in the format of tuples, where the first element is a winner, and the
+    second, a loser.
     '''
     with open(file_path, 'r', encoding='utf-8') as file:
         tournament_name = file.readline().strip()
