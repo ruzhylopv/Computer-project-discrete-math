@@ -38,7 +38,10 @@ def graph_visualize(games: list, prs: dict, filename: str = "images/graph.png"):
     G = nx.DiGraph()
 
     G.add_nodes_from(list(prs.keys()))
-    G.add_edges_from(games)
+    games_swapped = []
+    for v, u in games:
+        games_swapped.append((u, v))
+    G.add_edges_from(games_swapped)
     max_pr = max(prs.values())
     norm = mcolors.Normalize(vmin=0, vmax=max_pr)
 
