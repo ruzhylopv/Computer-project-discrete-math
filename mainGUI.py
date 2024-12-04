@@ -133,10 +133,14 @@ def page_rank(graph: dict) -> dict[str, list[int]]:
     ...     'C': ({'A', 'B', 'D'}, {'A', 'D'})
     ... }
     >>> page_rank(d)
-    {'A': [0.25, 0.08333333333333333, 0.125], \
-'B': [0.25, 0.20833333333333331, 0.16666666666666666], \
-'D': [0.25, 0.3333333333333333, 0.3333333333333333], \
-'C': [0.25, 0.375, 0.375]}
+    {'A': [0.25, 0.08333333333333333, 0.125, 0.125, 0.13194444444444445, \
+0.11805555555555554, 0.1284722222222222, 0.1238425925925926], 'B': \
+[0.25, 0.20833333333333331, 0.16666666666666666, 0.1875, 0.19444444444444445, \
+0.18402777777777776, 0.18749999999999997, 0.18807870370370372], 'D': \
+[0.25, 0.3333333333333333, 0.3333333333333333, 0.29166666666666663, \
+0.3194444444444444, 0.3125, 0.3125, 0.31134259259259256], 'C': \
+[0.25, 0.375, 0.375, 0.3958333333333333, 0.35416666666666663, \
+0.38541666666666663, 0.3715277777777778, 0.3767361111111111]}
     '''
     page_ranks = {key: [1/len(graph)] for key in graph}
     ind = True
@@ -410,7 +414,12 @@ def main():
         input()
         sys.exit()
     elif args.command == "pagerank":
-        file_path = d[list(d.keys())[int(args.tournament_name)]]
+        tournament_number = int(args.tournament_name)
+        if tournament_number < 1 or tournament_number > 6:
+            print('Wrong number')
+            input()
+            sys.exit()
+        file_path = d[list(d.keys())[tournament_number]]
         tournament_name, players_countries, games = read_file(file_path)
         dict_games = to_dict(games)
         raw_prs = page_rank(dict_games)
@@ -423,17 +432,8 @@ def main():
             print(f'{players_countries[player_name]}    {player_name}   {player_page_rank}    {raw_prs[player_name][-1]}')
         input()
         sys.exit()
-
-
-
-
     import doctest
     print(doctest.testmod())
-        
-
-
-
-    
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("dark-blue")
     global root
