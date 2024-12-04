@@ -17,6 +17,8 @@ from PIL import Image
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import argparse
+import sys
 
 
 PAGE_RANK_DELTA = 0.01
@@ -343,7 +345,7 @@ def main_screen():
     Returns:
     None
     '''
-    root.geometry("800x600")
+    root.geometry("1000x600")
     selected_file = d[file_menu.get()]
     clear_frame(root)
     style = ttk.Style()
@@ -378,14 +380,60 @@ def main():
     Returns:
     None
     """
-    import doctest
-    print(doctest.testmod())
     global tournaments
     tournaments = list(map(lambda x: 'tournaments/' + x,
         ['tournament_2.txt', 'tournament_3.txt', 'tournament_4.txt',
          'tournament_5.txt', 'tournament_6.txt', 'tournament_7.txt']))
     global d
     d = get_tournaments_dict(tournaments)
+
+    parser = argparse.ArgumentParser(description="Tournament Management System")
+
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    subparsers.add_parser("list", help="List all possible tournaments")
+
+    pagerank_parser = subparsers.add_parser("pagerank", help="Display PageRank for a specific tournament")
+    pagerank_parser.add_argument(
+        "tournament_name", 
+        type=str, 
+        help="The name of the tournament for which to display the PageRank table"
+    )
+    args = parser.parse_args()
+
+    if args.command == "list":
+        print('Here is the list of all tournaments:')
+        for i, tournament in enumerate(d.keys()):
+            print(f'{i + 1}. {tournament}')
+        print()
+        print('Use page rank arguement to see the tournament leaderboard')
+        input()
+        sys.exit()
+    elif args.command == "pagerank":
+        file_path = d[list(d.keys())[int(args.tournament_name)]]
+        tournament_name, players_countries, games = read_file(file_path)
+        dict_games = to_dict(games)
+        raw_prs = page_rank(dict_games)
+        global page_ranks
+        page_ranks = sort_by_rank(raw_prs)
+        print()
+        print(tournament_name)
+        print()
+        for player_name, player_page_rank in page_ranks.items():
+            print(f'{players_countries[player_name]}    {player_name}   {player_page_rank}    {raw_prs[player_name][-1]}')
+        input()
+        sys.exit()
+
+
+
+
+    import doctest
+    print(doctest.testmod())
+        
+
+
+
+    
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("dark-blue")
     global root
